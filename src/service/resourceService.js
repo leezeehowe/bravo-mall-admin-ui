@@ -1,0 +1,1 @@
+import { postResource } from "@/api/webpage.resource.js";

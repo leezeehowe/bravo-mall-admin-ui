@@ -1,0 +1,237 @@
+<template>
+  <div class="form">
+    <Form ref="formAdd" :model="formModel" :rules="validateRules">
+      <FormItem prop="type">
+        <p>资源类型</p>
+        <Select v-model="formModel.type">
+          <Option
+            v-for="item in webpageResourceType"
+            :value="item.value"
+            :key="item.value"
+          >{{ item.label }}</Option>
+        </Select>
+      </FormItem>
+      <FormItem prop="level">
+        <p>层级</p>
+        <Select v-model="formModel.level">
+          <Option :value="formModel.level" :key="formModel.level">{{ formModel.level + 1 + "级资源" }}</Option>
+        </Select>
+      </FormItem>
+      <FormItem label="上级资源" prop="parId">
+        <Cascader
+          :data="resourcesTree"
+          :load-data="loadTree"
+          v-model="formModel.parId"
+          @on-change="handleParOnchange"
+          placeholder="非一级资源请在此选择上级资源"
+        ></Cascader>
+      </FormItem>
+      <FormItem prop="name">
+        英文名称
+        <Input type="text" v-model="formModel.name" placeholder="用于标识该页面资源，不能重复"></Input>
+      </FormItem>
+      <FormItem prop="text">
+        中文标题
+        <Input type="text" v-model="formModel.text" placeholder="文字内容"></Input>
+      </FormItem>
+      <FormItem prop="description">
+        描述信息
+        <Input type="text" v-model="formModel.description" placeholder="关于此页面资源的描述信息"></Input>
+      </FormItem>
+      <FormItem prop="path">
+        Path路径
+        <Input type="text" v-model="formModel.path" placeholder="若是菜单，此菜单的前端路由路径，可不填"></Input>
+      </FormItem>
+      <FormItem>
+        <Button type="primary" @click="handleSubmit('formAdd')">提交</Button>
+        <Button @click="handleReset('formAdd')" style="margin-left: 8px">重置</Button>
+      </FormItem>
+    </Form>
+  </div>
+</template>
+
+<script>
+import { postResource, pageApi } from "@/api/webpage.resource.js";
+
+export default {
+  name: "webpage-resource-form",
+  data() {
+    return {
+      // 表单域
+      formModel: {
+        type: 0,
+        level: 0,
+        parId: [],
+        name: "",
+        text: "",
+        description: "",
+        path: ""
+      },
+      // 网页资源类型选择项
+      webpageResourceType: [
+        {
+          value: 0,
+          label: "菜单"
+        }
+      ],
+      // 表单域校验规则
+      validateRules: {
+        name: [
+          {
+            required: true,
+            message: "名称必须填写哦"
+          }
+        ],
+        text: [
+          {
+            required: true,
+            message: "最好填写哦"
+          }
+        ],
+        description: [
+          {
+            required: false
+          }
+        ],
+        path: [
+          {
+            required: false
+          }
+        ]
+      },
+      // 网页资源树
+      resourcesTree: []
+    };
+  },
+  methods: {
+    loadTree(item, callback) {
+      item.loading = true;
+      if (item.subCount <= 0) {
+        item.children = [
+          {
+            value: item.value,
+            label: "选择该资源"
+          }
+        ];
+        item.loading = false;
+        callback();
+      } else {
+        this.handleGetResource({
+          size: 1000,
+          parId: item.value,
+          level: item.level + 1
+        })
+          .then(({ records }) => {
+            item.children = this.transToTreeNode(records);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            item.loading = false;
+            callback();
+          });
+      }
+    },
+
+    /**
+     * 上级资源变化时
+     */
+    handleParOnchange(value, selectedData) {
+      console.log(value, selectedData);
+      this.formModel.level = selectedData[selectedData.length - 2].level + 1;
+    },
+
+    async handlePostResource({
+      name,
+      parId,
+      text,
+      path,
+      type,
+      description,
+      level
+    }) {
+      try {
+        console.log(parId[parId.length-1].id)
+        const _parId = parId[parId.length-1]
+        const resource = await postResource({
+          name,
+          parId: _parId,
+          text,
+          path,
+          type,
+          description,
+          level
+        });
+        return resource;
+      } catch (e) {
+        throw e;
+      }
+    },
+
+    transToTreeNode(records) {
+      if (!(records instanceof Array)) return [];
+      const arr = [];
+      records.forEach(i => {
+        arr.push({
+          value: i.id,
+          name: i.name,
+          label: i.text,
+          level: i.level,
+          subCount: i.subCount,
+          children: [],
+          loading: false
+        });
+      });
+      return arr;
+    },
+
+    async handleGetResource({ size, level, parId }) {
+      const { records } = await pageApi({
+        size,
+        level,
+        parId
+      });
+      return {records};
+    },
+
+    /**
+     * 提交表单
+     */
+    handleSubmit(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.handlePostResource(this.formModel)
+            .then(res => {
+              this.$Message.success("成功添加资源!");
+            })
+            .catch(err => {
+              this.$Message.error(`添加失败，${err.message}`);
+            });
+        }
+      });
+    },
+    /**
+     * 重置表单
+     */
+    handleReset(name) {
+      this.$refs[name].resetFields();
+    }
+  },
+
+  created() {
+    this.handleGetResource({
+      size: 1000,
+      level: 0
+    }).then(({records}) => {
+      this.resourcesTree = this.transToTreeNode(records)
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+};
+</script>
+
+<style lang="less" scoped>
+</style>
