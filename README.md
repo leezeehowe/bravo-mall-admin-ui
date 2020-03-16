@@ -1,90 +1,61 @@
-<p align="center">
-    <a href="https://www.iviewui.com">
-        <img width="200" src="https://file.iviewui.com/logo-new.svg">
-    </a>
-</p>
+# Bravo-Mall-Admin-Ui
+## 前言
+该项目为`Bravo-Mall`电商平台系统的后台管理系统UI，后端项目`Bravo-Mall`地址：[传送门]( https://github.com/leezeehowe/bravo-mall )
 
-<h1>
-iView Admin
-    <h3>Vue.js 2.0 admin management system template based on iView.</h3>
-</h1>
+## 项目介绍
 
-[![](https://img.shields.io/github/release/iview/iview-admin.svg)](https://github.com/iview/iview-admin/releases)
-[![](https://img.shields.io/travis/iview/iview-admin.svg?style=flat-square)](https://travis-ci.org/iview/iview-admin)
-[![vue](https://img.shields.io/badge/vue-2.5.17-brightgreen.svg?style=flat-square)](https://github.com/vuejs/vue)
-[![iview ui](https://img.shields.io/badge/iview-3.2.2-brightgreen.svg?style=flat-square)](https://github.com/iview/iview)
-[![npm](https://img.shields.io/npm/l/express.svg)]()
+`Bravo-Mall-admin-ui`是一个电商平台管理系统的前端项目，基于`Vue`+`IView admin`实现。
 
-## Introduction
+## 功能
 
-iView Admin is a front-end management background integration solution. It based on [Vue.js](https://github.com/vuejs/vue) and use the UI Toolkit [iView](https://github.com/iview/iview).
+### 1. 用户模块
 
-- [Document](https://lison16.github.io/iview-admin-doc/)
-- [Preview](https://admin.iviewui.com/)
-- [Base template recommends using](https://github.com/iview/iview-admin/tree/template)
+#### a. 短信登录
 
-![image](https://file.iviewui.com/admin-dist/admin-preview.png)
+#### b. 用户管理
 
-## Features
+### 2. 权限模块
 
-- Login / Logout
-- Permission Authentication
-    - A list of filters
-    - Permission to switch
-- i18n
-- Components
-    - Rich Text Editor
-    - Markdown Editor
-    - City Cascader
-    - Photos preview and edit
-    - Draggable list
-    - File upload
-    - Digital gradient
-    - split-pane
-- Form
-    - The article published
-    - Workflow
-- Table
-    - Drag-and-drop sort
-    - Searchable form
-    - Table export data
-        - Export to Csv file
-        - Export to Xls file
-    - Table to picture
-- Error Page
-    - 403
-    - 404
-    - 500
-- Router
-    - Dynamic routing
-    - With reference page
-- Theme
-- Shrink the sidebar
-- Tag navigation
-- Breadcrumb navigation
-- Full screen / exit full screen
-- Lock screen
-- The message center
-- Personal center
+#### a. 角色管理
 
-## Getting started
-```bush
-# clone the project
-git clone https://github.com/iview/iview-admin.git
+#### b. 资源管理
 
-// install dependencies
-npm install
+### 3. 商品模块
 
-// develop
-npm run dev
-```
+#### a. 类目管理
 
-## Build
-```bush
-npm run build
-```
+#### b. 属性管理
 
-## License
-[MIT](http://opensource.org/licenses/MIT)
+#### c. 商品管理
 
-Copyright (c) 2016-present, TalkingData
+### 4. 系统管理
+
+#### a. 浏览器运行日志
+
+#### b. 微服务运行日志
+
+## 技术栈
+
+[Vue]( https://cn.vuejs.org/ ) 
+
+`Javascript`的渐进式`MVVM`框架，易上手又功能强👍！
+
+[Vue Router]( https://router.vuejs.org/zh/ )
+
+`Vue`官方的前端路由管理器，用于实现SPA应用中界面的跳转，有路由拦截等功能，也很强👍！
+
+[Vuex]( https://vuex.vuejs.org/zh/ )
+
+`Vue`官方的状态管理器？对我来说就像是一个前端数据库！
+
+[axios]( https://github.com/axios/axios )
+
+ 一个基于 promise 的 HTTP 库 ，有请求拦截和响应拦截等功能。
+
+[IView]( https://www.iviewui.com/ )
+
+一套基于Vue.js的高质量UI组件库，它的UI组件好看且`API`又丰富，无敌！
+
+[moment]( https://momentjs.com/ ) 
+
+Javascript的日期时间处理类库。
