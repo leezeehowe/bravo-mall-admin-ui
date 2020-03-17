@@ -11,31 +11,29 @@
 ### 1. 用户模块
 
 #### a. 短信登录
-
+![](https://lee-img-bed.oss-cn-shenzhen.aliyuncs.com/bravo-mall-admin/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95.JPG)
 #### b. 用户管理
-
+待实现
 ### 2. 权限模块
-
 #### a. 角色管理
-
+角色列表
+![](https://lee-img-bed.oss-cn-shenzhen.aliyuncs.com/bravo-mall-admin/%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8.JPG)
+添加角色
+![](https://lee-img-bed.oss-cn-shenzhen.aliyuncs.com/bravo-mall-admin/%E6%B7%BB%E5%8A%A0%E8%A7%92%E8%89%B2-1.JPG)
 #### b. 资源管理
-
+资源列表
+![](https://lee-img-bed.oss-cn-shenzhen.aliyuncs.com/bravo-mall-admin/%E8%B5%84%E6%BA%90%E5%88%97%E8%A1%A8.JPG)
 ### 3. 商品模块
-
+待实现
 #### a. 类目管理
-
 #### b. 属性管理
-
 #### c. 商品管理
-
 ### 4. 系统管理
-
 #### a. 浏览器运行日志
-
+![](https://lee-img-bed.oss-cn-shenzhen.aliyuncs.com/bravo-mall-admin/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97.JPG)
 #### b. 微服务运行日志
-
+待实现
 ## 技术栈
-
 [Vue]( https://cn.vuejs.org/ ) 
 
 `Javascript`的渐进式`MVVM`框架，易上手又功能强👍！
