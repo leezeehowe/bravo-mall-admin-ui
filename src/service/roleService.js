@@ -26,14 +26,6 @@ import {pageApi, deepestLevelApi} from '@/api/role'
   return res
 }
 
-/**
- * 根据角色ID获取角色名
- * @param {}} roleId 
- */
-export const handleGetNameById = async (roleId) => {
-
-}
-
 export const handleGetdeeepestLevel = async() => {
   return await deepestLevelApi()
 }

@@ -35,8 +35,8 @@
       </Content>
       <Footer style="background-color: white; text-align: center; padding: 10px 0">
             <p style="color: #808695">
-                <span>©2019 广州剑马科技有限责任公司 版权所有</span><br>
-                <a href="http://www.shequjiadian" target="_blank" style="color: #808695">粤ICP备19086439号-1</a>
+                <span>©2019 Bravo-Mall 版权所有</span><br>
+                <!-- <a href="http://www.shequjiadian" target="_blank" style="color: #808695">粤ICP备19086439号-1</a> -->
             </p>
       </Footer>
     </Layout>
@@ -56,6 +56,8 @@ import { getNewTagList, routeEqual } from '@/libs/util'
 import routers from '@/router/routers'
 import minLogo from '@/assets/images/logo-min.jpg'
 import maxLogo from '@/assets/images/logo.jpg'
+import { getAllowableMenuList } from '@/libs/bravoUtil.js'
+
 import './main.less'
 export default {
   name: 'Main',
@@ -95,7 +97,10 @@ export default {
       return list
     },
     menuList () {
-      return this.$store.getters.menuList
+      let menuList = this.$store.getters.menuList;
+      let routerAuthorityList = this.$store.getters.routerAuthorityList
+      getAllowableMenuList(menuList, routerAuthorityList);
+      return menuList;
     },
     local () {
       return this.$store.state.app.local

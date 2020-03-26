@@ -26,7 +26,6 @@
         <example style="height: 310px;" />
       </Card>
     </Row>
-    <Button @click="test">Default</Button>
   </div>
 </template>
 
@@ -78,14 +77,8 @@
       //
     },
     methods: {
-      async test() {
-        try {
-          const res = await pageApi()
-          console.log(res)
-        } catch (e) {
-          console.log(e)
-        }
-      }
+    },
+    created() {
     }
   }
 </script>

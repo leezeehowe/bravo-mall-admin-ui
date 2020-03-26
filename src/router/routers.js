@@ -88,7 +88,8 @@ export default [
     name: 'category',
     meta: {
       icon: 'ios-stats',
-      title: '类目管理'
+      title: '类目管理',
+      showAlways: true
     },
     component: Main,
     children: [
@@ -99,16 +100,7 @@ export default [
           icon: 'md-add',
           title: '类目列表'
         },
-        component: () => import('@/view/system-log-page/system-log-page.vue')
-      },
-      {
-        path: 'add',
-        name: 'category-add',
-        meta: {
-          icon: 'md-add',
-          title: '添加类目'
-        },
-        component: () => import('@/view/system-log-page/system-log-page.vue')
+        component: () => import('@/components/category/category-table/category-table.vue')
       }
     ]
   },
@@ -174,7 +166,7 @@ export default [
           icon: 'md-add',
           title: '用户列表'
         },
-        component: () => import('@/view/system-log-page/system-log-page.vue')
+        component: () => import('@/view/ums/user-list.vue')
       }
     ]
   },
@@ -206,6 +198,15 @@ export default [
           title: '添加角色'
         },
         component: () => import('@/view/ams/role/role-add')
+      },
+      {
+        path: 'issue',
+        name: 'role-issue',
+        meta: {
+          icon: 'md-add',
+          title: '颁发角色'
+        },
+        component: () => import('@/components/role/issue-role-form/issue-role-form.vue')
       }
     ]
   },
@@ -221,22 +222,63 @@ export default [
     component: Main,
     children: [
       {
-        path: 'list',
-        name: 'webpage-list',
+        path: 'webpage',
+        name: 'resource-webpage',
         meta: {
           icon: 'md-add',
-          title: '页面资源'
+          title: '页面资源',
+          showAlways: true
         },
-        component: () => import('@/view/ams/resource/webpage')
+        component: parentView,
+        children: [
+          {
+            path: 'list',
+            name: 'resource-webpage-list',
+            meta: {
+              icon: 'md-add',
+              title: '页面资源列表'
+            },
+            component: () => import('@/view/ams/resource/webpage/webpage-list.vue')
+          },
+          {
+            path: 'add',
+            name: 'resource-webpage-add',
+            meta: {
+              icon: 'md-add',
+              title: '添加页面资源'
+            },
+            component: () => import('@/view/ams/resource/webpage/webpage-add.vue')
+          }
+        ]
       },
       {
-        path: 'list',
-        name: 'api-list',
+        path: 'api',
+        name: 'resource-api',
         meta: {
           icon: 'md-add',
           title: 'API资源'
         },
-        component: () => import('@/view/system-log-page/system-log-page.vue')
+        component: parentView,
+        children: [
+          {
+            path: 'list',
+            name: 'resource-api-list',
+            meta: {
+              icon: 'md-add',
+              title: 'API资源列表'
+            },
+            component: () => import('@/view/ams/resource/api/api-list.vue')
+          },
+          {
+            path: 'add',
+            name: 'resource-api-add',
+            meta: {
+              icon: 'md-add',
+              title: '添加API资源'
+            },
+            component: () => import('@/view/ams/resource/api/api-add.vue')
+          }
+        ]
       }
     ]
   },

@@ -19,28 +19,8 @@
             <!-- <Icon type="ios-film-outline"></Icon> -->
             角色-{{steps[current-1].title}}
           </p>
-          <ButtonGroup :size="buttonSize" slot="extra" shape="circle">
-            <Button
-              :size="buttonSize"
-              type="primary"
-              ghost
-              @click="handlePreForm"
-              :disabled="btnPreFormDisabled"
-            >
-              <Icon type="ios-arrow-back" />上一步
-            </Button>
-            <Button
-              :size="buttonSize"
-              type="primary"
-              @click="handleNextForm"
-              :disabled="btnNextFormDisabled"
-            >
-              下一步
-              <Icon type="ios-arrow-forward" />
-            </Button>
-          </ButtonGroup>
           <keep-alive>
-            <component v-bind:is="formComponents[current-1]"></component>
+            <component v-bind:is="formComponents[current-1]" @createRoleSuccess="handleCreateRoleSuccess" :id="createdRole.id" :name="createdRole.name" :level="createdRole.level"></component>
           </keep-alive>
         </Card>
       </Col>
@@ -49,8 +29,8 @@
 </template>
 
 <script>
-import BasicForm from "_c/basic-role-form";
-import AuthorityForm from "_c/authority-role-form";
+import BasicForm from "_c/role/basic-role-form";
+import AuthorityForm from "_c/role/authority-role-form";
 
 export default {
   name: "addRolePage",
@@ -75,29 +55,16 @@ export default {
           content: "新的角色诞生了"
         }
       ],
-      btnNextFormDisabled: false,
-      btnPreFormDisabled: true,
-      buttonSize: "default",
       formComponents: [BasicForm, AuthorityForm],
-      current: 1
+      current: 1,
+      // 创建的角色基本信息
+      createdRole: {}
     };
   },
-  watch: {
-    current(n, o) {
-      n === this.formComponents.length
-        ? (this.btnNextFormDisabled = true)
-        : (this.btnNextFormDisabled = false);
-      n === 1
-        ? (this.btnPreFormDisabled = true)
-        : (this.btnPreFormDisabled = false);
-    }
-  },
   methods: {
-    handleNextForm(e) {
+    handleCreateRoleSuccess(role) {
+      this.createdRole = role;
       this.current = this.current + 1;
-    },
-    handlePreForm(e) {
-      this.current = this.current - 1;
     }
   }
 };

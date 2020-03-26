@@ -72,8 +72,8 @@ export default {
             title: "上级资源ID"
           },
           {
-            key: "path",
-            title: "资源路径"
+            key: "subCount",
+            title: "子孙资源数量"
           },
           {
             key: "description",
@@ -100,12 +100,14 @@ export default {
     selectedLevel: {
       async handler(nV, oV) {
         console.log("handler")
-        const {records} = await this.handleGetResource({
+        const {records, total, pages} = await this.handleGetResource({
           size: 1000,
           level: nV.join(),
           parId: -1
         });
         this.showingData = records;
+        this.pagination.total = total;
+        this.pagination.pages = pages;
       },
       immediate: false
     }
@@ -116,12 +118,12 @@ export default {
      * 获取资源
      */
     async handleGetResource({ size, level, parId }) {
-      const { records } = await pageApi({
+      const { records, total, pages } = await pageApi({
         size,
         level,
         parId
       });
-      return {records};
+      return {records, total, pages};
     },
   },
   created() {

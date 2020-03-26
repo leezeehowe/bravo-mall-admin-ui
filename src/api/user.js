@@ -8,7 +8,7 @@ const baseUrl = "/bravo-mall-usercenter/api/v1"
  * @param {string} phoneNumber  手机号
  * @param {string} smsCode  手机验证码
  */
-export const login = ( phoneNumber, smsCode ) => {
+export const login = (phoneNumber, smsCode) => {
   console.log(phoneNumber, smsCode)
   return axios.request({
     url: baseUrl + "/token/platform",
@@ -50,7 +50,7 @@ export const sendSmsCode = async (phoneNumber) => {
     })
     return "获取验证码成功！"
   }
-  catch(e) {
+  catch (e) {
     throw new Error(e.cause)
   }
 }
@@ -61,11 +61,44 @@ export const sendSmsCode = async (phoneNumber) => {
  */
 export const logout = (token) => {
   return axios.request({
-    url: '/user/logout',
+    url: baseUrl + '/user/logout',
     method: 'post'
   })
 }
 
+/**
+ * 分页获取用户列表
+ * @param {*} current 
+ * @param {*} size 
+ */
+export const pageAdminVo = (current, size) => {
+  return axios.request({
+    url: baseUrl + '/user/adminVo/page',
+    params: {
+      current,
+      size
+    }
+  })
+}
+
+/**
+ * 搜索用户
+ * @param {}} param0 
+ */
+export const searchUser = ({
+  phone,
+  username,
+  uuid
+}) => {
+  return axios.request({
+    url: baseUrl + '/user/adminVo/search',
+    params: {
+      phone,
+      username,
+      uuid
+    }
+  })
+}
 
 /***************************** 待实现的 ***************************************/
 export const getUnreadCount = () => {

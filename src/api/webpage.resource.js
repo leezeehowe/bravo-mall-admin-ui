@@ -34,7 +34,6 @@ export const postResource = ({
     name,
     parId,
     text,
-    path,
     type,
     description,
     level
@@ -46,7 +45,6 @@ export const postResource = ({
             name,
             parId,
             text,
-            path,
             type,
             description,
             level
@@ -60,5 +58,14 @@ export const postResource = ({
 export const getDeepestLevel = () => {
     return axios.request({
         url: '/bravo-mall-authorization/api/v1/tree/level/webpage_resource'
+    })
+}
+
+/**
+ * 获取后台管理系统页面资源
+ */
+export const getAdminWebpageResourceTree = () => {
+    return axios.request({
+        url: baseUrl + '/tree/all'
     })
 }

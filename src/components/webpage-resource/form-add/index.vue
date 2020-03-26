@@ -20,8 +20,9 @@
       <FormItem label="上级资源" prop="parId">
         <Cascader
           :data="resourcesTree"
-          :load-data="loadTree"
           v-model="formModel.parId"
+          change-on-select
+          filterable
           @on-change="handleParOnchange"
           placeholder="非一级资源请在此选择上级资源"
         ></Cascader>
@@ -38,10 +39,6 @@
         描述信息
         <Input type="text" v-model="formModel.description" placeholder="关于此页面资源的描述信息"></Input>
       </FormItem>
-      <FormItem prop="path">
-        Path路径
-        <Input type="text" v-model="formModel.path" placeholder="若是菜单，此菜单的前端路由路径，可不填"></Input>
-      </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit('formAdd')">提交</Button>
         <Button @click="handleReset('formAdd')" style="margin-left: 8px">重置</Button>
@@ -51,7 +48,10 @@
 </template>
 
 <script>
-import { postResource, pageApi } from "@/api/webpage.resource.js";
+import { postResource, getAdminWebpageResourceTree } from "@/api/webpage.resource.js";
+import {
+  peekAttributeFromPayloadToOutside
+} from "@/libs/bravoUtil.js";
 
 export default {
   name: "webpage-resource-form",
@@ -64,8 +64,7 @@ export default {
         parId: [],
         name: "",
         text: "",
-        description: "",
-        path: ""
+        description: ""
       },
       // 网页资源类型选择项
       webpageResourceType: [
@@ -92,11 +91,6 @@ export default {
           {
             required: false
           }
-        ],
-        path: [
-          {
-            required: false
-          }
         ]
       },
       // 网页资源树
@@ -104,61 +98,23 @@ export default {
     };
   },
   methods: {
-    loadTree(item, callback) {
-      item.loading = true;
-      if (item.subCount <= 0) {
-        item.children = [
-          {
-            value: item.value,
-            label: "选择该资源"
-          }
-        ];
-        item.loading = false;
-        callback();
-      } else {
-        this.handleGetResource({
-          size: 1000,
-          parId: item.value,
-          level: item.level + 1
-        })
-          .then(({ records }) => {
-            item.children = this.transToTreeNode(records);
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => {
-            item.loading = false;
-            callback();
-          });
-      }
-    },
-
     /**
      * 上级资源变化时
      */
     handleParOnchange(value, selectedData) {
-      console.log(value, selectedData);
-      this.formModel.level = selectedData[selectedData.length - 2].level + 1;
+      if (selectedData.length == 0) this.formModel.level = 0;
+      else {
+        this.formModel.level = selectedData[selectedData.length - 1].payload.level + 1;
+      }
     },
 
-    async handlePostResource({
-      name,
-      parId,
-      text,
-      path,
-      type,
-      description,
-      level
-    }) {
+    async handlePostResource({ name, parId, text, type, description, level }) {
       try {
-        console.log(parId[parId.length-1].id)
-        const _parId = parId[parId.length-1]
+        const _parId = parId.length > 0 ? parId[parId.length - 1] : 0;
         const resource = await postResource({
           name,
           parId: _parId,
           text,
-          path,
           type,
           description,
           level
@@ -169,32 +125,6 @@ export default {
       }
     },
 
-    transToTreeNode(records) {
-      if (!(records instanceof Array)) return [];
-      const arr = [];
-      records.forEach(i => {
-        arr.push({
-          value: i.id,
-          name: i.name,
-          label: i.text,
-          level: i.level,
-          subCount: i.subCount,
-          children: [],
-          loading: false
-        });
-      });
-      return arr;
-    },
-
-    async handleGetResource({ size, level, parId }) {
-      const { records } = await pageApi({
-        size,
-        level,
-        parId
-      });
-      return {records};
-    },
-
     /**
      * 提交表单
      */
@@ -203,6 +133,10 @@ export default {
         if (valid) {
           this.handlePostResource(this.formModel)
             .then(res => {
+              this.handleGetResource({
+                size: 1000,
+                level: 0
+              });
               this.$Message.success("成功添加资源!");
             })
             .catch(err => {
@@ -220,15 +154,12 @@ export default {
   },
 
   created() {
-    this.handleGetResource({
-      size: 1000,
-      level: 0
-    }).then(({records}) => {
-      this.resourcesTree = this.transToTreeNode(records)
+    getAdminWebpageResourceTree().then(res => {
+      peekAttributeFromPayloadToOutside(res, [["label", "text"], ['value', 'id']]);
+      this.resourcesTree = res;
+    }).catch(err => {
+      this.$Message.error(err.message);
     })
-    .catch(err => {
-      console.log(err);
-    });
   }
 };
 </script>

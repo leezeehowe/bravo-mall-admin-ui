@@ -1,11 +1,7 @@
 import axios from '@/libs/api.request'
 
-export const getRouterReq = (access) => {
+export const getRouters = () => {
   return axios.request({
-    url: 'get_router',
-    params: {
-      access
-    },
-    method: 'get'
+    url: '/bravo-mall-authorization/api/v1/authority/webpage/router'
   })
 }

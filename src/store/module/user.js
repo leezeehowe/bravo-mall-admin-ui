@@ -9,6 +9,7 @@ import {
   restoreTrash,
   getUnreadCount
 } from '@/api/user'
+import { getRouters } from '@/api/routers'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -24,6 +25,7 @@ export default {
     updateTime: '',
     hasGetInfo: false,
     unreadCount: 0,
+    routerAuthorityList: [],
     messageUnreadList: [],
     messageReadedList: [],
     messageTrashList: [],
@@ -61,6 +63,9 @@ export default {
     setHasGetInfo(state, status) {
       state.hasGetInfo = status
     },
+    setRouterAuthorityList(state, routerAuthorityList) {
+      state.routerAuthorityList = routerAuthorityList
+    },
     setMessageCount(state, count) {
       state.unreadCount = count
     },
@@ -86,13 +91,14 @@ export default {
   getters: {
     messageUnreadCount: state => state.messageUnreadList.length,
     messageReadedCount: state => state.messageReadedList.length,
-    messageTrashCount: state => state.messageTrashList.length
+    messageTrashCount: state => state.messageTrashList.length,
+    routerAuthorityList: state => state.routerAuthorityList
   },
   actions: {
     // 登录
     handleLogin({ commit }, { phone, verifyCode }) {
       return new Promise((resolve, reject) => {
-        login(phone, verifyCode).then( resource => {
+        login(phone, verifyCode).then(resource => {
           console.log(resource)
           commit('setToken', resource.accessToken)
           resolve()
@@ -118,7 +124,8 @@ export default {
       })
     },
     // 获取用户相关信息
-    handleGetUserInfo({ state, commit }, data) {
+    handleGetUserInfo({ state, commit }) {
+      const data = {};
       return new Promise((resolve, reject) => {
         commit('setAvatar', 'https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png')
         commit('setUserName', data.username)
@@ -129,7 +136,12 @@ export default {
         commit('setCreateTime', data.createTime)
         commit('setUpdateTime', data.updateTime)
         commit('setHasGetInfo', true)
-        resolve()
+        getRouters().then(res => {
+          commit('setRouterAuthorityList', res);
+          resolve(data)
+        }).catch(err => {
+          reject(err);
+        })
       })
     },
     // 此方法用来获取未读消息条数，接口只返回数值，不返回消息列表

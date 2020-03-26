@@ -47,12 +47,14 @@ class HttpRequest {
     }
     return config
   }
+
   destroy(url) {
     delete this.queue[url]
     if (!Object.keys(this.queue).length) {
       // Spin.hide()
     }
   }
+  
   interceptors(instance, url) {
     // 请求拦截
     instance.interceptors.request.use(config => {
@@ -68,7 +70,6 @@ class HttpRequest {
     // 响应拦截
     instance.interceptors.response.use(res => {
       this.destroy(url)
-      console.log(res)
       const { data, status, statusText } = res
 
       // 业务未成功，记入错误日志
@@ -109,7 +110,8 @@ class HttpRequest {
       // 业务失败，只返回异常信息
       else {
         const exception = data.exception
-        return Promise.reject(new Error( exception ? exception.cause : '请求失败，请重试'))
+        let message = exception ? exception.message + "，" + exception.cause : '请求失败，请重试';
+        return Promise.reject({message});
       }
     })
   }

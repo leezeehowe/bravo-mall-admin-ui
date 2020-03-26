@@ -1,3 +1,9 @@
+<style>
+.mtb {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+</style>
 <template>
   <div>
     <Table
@@ -24,14 +30,25 @@
       </template>
 
       <template slot-scope="{ row }" slot="action">
-        <Button
-          type="primary"
-          size="small"
-          style="margin-right: 5px"
-          :disabled="row.subCount <= 0"
-          @click="handleShowSubRoles(row.id, row.level+1)"
-        >查看下级角色</Button>
-        <Button type="error" size="small" disabled>删除</Button>
+        <Row class-name="mtb" :gutter="5">
+
+          <Col span="8">
+            <Button type="primary" size="small" @click="handleViewAuthority(row)">查看权限</Button>
+          </Col>
+
+          <Col span="8">
+            <Button
+              type="primary"
+              size="small"
+              :disabled="row.subCount <= 0"
+              @click="handleShowSubRoles(row.id, row.level+1)"
+            >查看下级角色</Button>
+          </Col>
+
+          <Col span="8">
+            <Button type="error" size="small" disabled>删除</Button>
+          </Col>
+        </Row>
       </template>
 
       <Row slot="footer" type="flex" justify="center" :gutter="24">
@@ -67,15 +84,27 @@
         </Col>
       </Row>
     </Table>
+    <br />
+
+    <Modal v-model="authorityModal.show" title="角色权限" transfer>
+      <authority-role-form :role="authorityModal.role"></authority-role-form>
+      <div slot="footer">
+        <!-- <Button type="primary" ghost long>取消</Button> -->
+      </div>
+    </Modal>
+
   </div>
 </template>
 
 <script>
 import { handleGetPage, handleGetdeeepestLevel } from "@/service/roleService";
+import AuthorityRoleForm from "@/components/role/authority-role-form";
 
 export default {
   name: "role-list",
-
+  components: {
+    AuthorityRoleForm
+  },
   data() {
     return {
       table: {
@@ -135,8 +164,9 @@ export default {
           },
           {
             title: "操作",
-            align: "center",
-            slot: "action"
+            slot: "action",
+            width: 270,
+            align: "center"
           }
         ]
       },
@@ -149,7 +179,13 @@ export default {
       },
       showingData: [],
       currentLevel: 0,
-      deepestLevel: 0
+      deepestLevel: 0,
+
+      // 查看角色权限组件
+      authorityModal: {
+        show: false,
+        role: null
+      }
     };
   },
 
@@ -203,6 +239,14 @@ export default {
      */
     updateShowingData(arr) {
       this.showingData = arr;
+    },
+
+    /**
+     * 查看角色权限
+     */
+    handleViewAuthority(role) {
+      this.authorityModal.role = Object.assign({}, role);
+      this.authorityModal.show = true;
     },
 
     /**

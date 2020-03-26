@@ -33,7 +33,7 @@
           // 获取token
           await this.handleLogin( {phone, verifyCode} )
           // 获取用户信息
-          await this.handleGetUserInfo({})
+          await this.handleGetUserInfo()
           // 跳转首页
           this.$router.push({
             name: this.$config.homeName
@@ -42,7 +42,6 @@
         catch(e) {
 
         }
-        
       }
   }
 }
